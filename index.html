@@ -3,62 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mason’s Mansion | V14 Finalized</title>
+    <title>Mason’s Mansion | V15 Perfection</title>
     <style>
         :root {
             --bg: #050400;
             --accent: #ffcc33;
-            --glow: rgba(255, 204, 51, 0.25);
+            --glow: rgba(255, 204, 51, 0.2);
             --glass: rgba(15, 12, 5, 0.98);
-            --border: rgba(255, 204, 51, 0.2);
+            --border: rgba(255, 204, 51, 0.25);
             --text: #ffffff;
-            --font: 'Segoe UI', system-ui, sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font); cursor: crosshair; touch-action: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; cursor: crosshair; touch-action: none; }
         #bg-canvas { position: fixed; inset: 0; z-index: 0; }
 
         /* --- AUTH --- */
-        #auth-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #000; transition: 0.8s; }
+        #auth-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; background: #000; }
         .login-card { background: var(--glass); padding: 40px; border-radius: 30px; border: 1px solid var(--accent); text-align: center; width: 90%; max-width: 350px; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .login-card h1 { color: var(--accent); letter-spacing: 5px; margin-bottom: 5px; font-size: 22px; }
-        .credits { font-size: 10px; opacity: 0.6; margin-bottom: 25px; letter-spacing: 2px; }
+        .login-card h1 { color: var(--accent); letter-spacing: 5px; margin-bottom: 10px; font-size: 24px; }
         .login-card input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 12px; color: #fff; margin-bottom: 15px; text-align: center; font-size: 16px; }
-        .login-card button { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--accent); color: #000; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .login-card button { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--accent); color: #000; font-weight: 900; cursor: pointer; }
 
         /* --- THE 10 COMMAND SIDEBAR --- */
         #sidebar {
-            position: fixed; left: -260px; top: 50%; transform: translateY(-50%);
+            position: fixed; left: 0; top: 50%; transform: translateY(-50%);
             width: 260px; background: var(--glass); border: 1px solid var(--border);
             padding: 20px; border-radius: 0 25px 25px 0; z-index: 2000;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-height: 95vh; overflow-y: auto;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
         }
-        #sidebar.open { left: 0; box-shadow: 15px 0 40px rgba(0,0,0,0.8); border-right: 2px solid var(--accent); }
+        #sidebar.closed { left: -260px; }
         #sidebar-tab {
             position: absolute; right: -45px; top: 50%; transform: translateY(-50%);
             background: var(--accent); color: #000; padding: 15px 10px;
             border-radius: 0 12px 12px 0; cursor: pointer; font-weight: 900; writing-mode: vertical-rl; font-size: 11px;
         }
 
-        .option-btn { width: 100%; padding: 10px; margin: 4px 0; background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: #fff; border-radius: 10px; font-size: 11px; cursor: pointer; text-align: left; }
-        .option-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); }
+        .option-btn { width: 100%; padding: 10px; margin: 4px 0; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: #fff; border-radius: 10px; font-size: 11px; cursor: pointer; text-align: left; }
+        .option-btn:hover { border-color: var(--accent); background: rgba(255,255,255,0.08); }
         .option-btn.active { background: var(--accent); color: #000; font-weight: bold; }
-        
-        /* Mobile Pulse Specific Style */
-        .mobile-btn { background: var(--accent) !important; color: #000 !important; font-weight: 900; text-align: center; margin-top: 10px; border-radius: 15px; height: 45px; }
+        .mobile-btn { background: var(--accent) !important; color: #000 !important; font-weight: 900; text-align: center; margin-top: 10px; height: 45px; }
 
-        /* --- DESKTOP --- */
+        /* --- WINDOWS --- */
         #desktop { position: relative; width: 100vw; height: 100vh; z-index: 10; display: none; }
-        .window { position: absolute; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; backdrop-filter: blur(20px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); overflow: hidden; display: flex; flex-direction: column; min-width: 300px; }
+        .window { position: absolute; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; backdrop-filter: blur(15px); box-shadow: 0 15px 40px rgba(0,0,0,0.6); overflow: hidden; display: flex; flex-direction: column; min-width: 300px; }
         .win-header { padding: 12px 15px; background: rgba(255,255,255,0.02); cursor: move; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .win-title { font-size: 10px; font-weight: bold; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; }
-        .win-close { cursor: pointer; color: #ff5f56; font-size: 20px; line-height: 1; }
+        .win-close { cursor: pointer; color: #ff5f56; font-size: 20px; }
 
         #taskbar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--glass); border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; display: flex; gap: 15px; z-index: 1000; }
-        .t-icon { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.01); border-radius: 15px; cursor: pointer; font-size: 24px; transition: 0.2s; border: 1px solid transparent; }
-        .t-icon:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
+        .t-icon { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 15px; cursor: pointer; font-size: 24px; transition: 0.2s; border: 1px solid transparent; }
+        .t-icon:hover { transform: translateY(-8px); border-color: var(--accent); background: rgba(255,204,51,0.1); }
 
         iframe { width: 100%; height: 100%; border: none; background: #000; }
         .hidden { display: none !important; }
@@ -71,30 +67,26 @@
     <div id="auth-overlay">
         <div class="login-card">
             <h1>MASON'S MANSION</h1>
-            <p class="credits">Mason Porrazzo Edition</p>
+            <p style="font-size:10px; opacity:0.5; margin-bottom:20px;">V15 PERFECT DRIFT</p>
             <input type="password" id="sys-pass" placeholder="PASSWORD">
-            <button onclick="Mansion.init()">ACTIVATE MADNESS</button>
+            <button onclick="Mansion.init()">ENTER MANSION</button>
         </div>
     </div>
 
     <div id="desktop">
         <div id="sidebar">
-            <div id="sidebar-tab" onclick="document.getElementById('sidebar').classList.toggle('open')">BUBBLE MADNESS</div>
-            <h4 style="font-size: 10px; color: var(--accent); margin-bottom: 10px; letter-spacing: 2px;">THE COMMANDS</h4>
-            
+            <div id="sidebar-tab" onclick="document.getElementById('sidebar').classList.toggle('closed')">COMMANDS</div>
+            <h4 style="font-size: 10px; color: var(--accent); margin-bottom: 10px; letter-spacing: 2px;">MADNESS LIST</h4>
             <button class="option-btn" onclick="Mansion.chaosBurst()">1. Spawn Swarm (H)</button>
-            <button class="option-btn active" id="m-float" onclick="Mansion.toggle('float')">2. Auto-Drift</button>
+            <button class="option-btn active" id="m-float" onclick="Mansion.toggle('float')">2. Living Drift</button>
             <button class="option-btn" id="m-pulse" onclick="Mansion.toggle('pulse')">3. Size Pulse</button>
-            <button class="option-btn" id="m-rgb" onclick="Mansion.toggle('rgb')">4. RGB Madness</button>
+            <button class="option-btn" id="m-rgb" onclick="Mansion.toggle('rgb')">4. RGB Glow</button>
             <button class="option-btn" id="m-magnet" onclick="Mansion.toggle('magnet')">5. Magnetism</button>
             <button class="option-btn" id="m-trails" onclick="Mansion.toggle('trails')">6. Phantom Trails</button>
             <button class="option-btn" id="m-jitter" onclick="Mansion.toggle('jitter')">7. Jitter Mode</button>
-            <button class="option-btn" id="m-warp" onclick="Mansion.toggle('warp')">8. Warp Speed</button>
-            <button class="option-btn" id="m-shadow" onclick="Mansion.toggle('shadow')">9. Void Centers</button>
+            <button class="option-btn" id="m-warp" onclick="Mansion.toggle('warp')">8. High Velocity</button>
+            <button class="option-btn" id="m-shadow" onclick="Mansion.toggle('shadow')">9. Dark Center</button>
             <button class="option-btn mobile-btn" onmousedown="Mansion.mobilePulse(true)" onmouseup="Mansion.mobilePulse(false)" ontouchstart="Mansion.mobilePulse(true)" ontouchend="Mansion.mobilePulse(false)">10. MOBILE PULSE</button>
-            
-            <hr style="opacity: 0.1; margin: 10px 0;">
-            <p style="font-size: 9px; opacity: 0.4; text-align:center;">H: Swarm | Click: Pop</p>
         </div>
 
         <div id="win-layer"></div>
@@ -108,29 +100,25 @@
 
     <script>
         const Mansion = {
-            rank: 'guest',
             orbs: [],
             isMouseDown: false,
-            boundary: 120, 
-            baseRadius: 38,
+            boundary: 130, 
+            baseRadius: 40,
             mods: { float: true, pulse: false, rgb: false, trails: false, magnet: false, jitter: false, warp: false, shadow: false },
             themes: [
                 { n: 'Honey Gold', a: '#ffcc33', g: 'rgba(255, 204, 51, 0.2)' },
                 { n: 'Cyan Nova', a: '#00f2ff', g: 'rgba(0, 242, 255, 0.2)' },
-                { n: 'Deep Blood', a: '#ff3333', g: 'rgba(255, 51, 51, 0.2)' }
+                { n: 'Acid Lime', a: '#00ff88', g: 'rgba(0, 255, 136, 0.2)' }
             ],
 
             init() {
                 const p = document.getElementById('sys-pass').value;
-                if(p === "masononly69") { this.rank = "OWNER"; document.getElementById('owner-icon').classList.remove('hidden'); this.boot(); }
-                else if(p === "honey") { this.rank = "MEMBER"; this.boot(); }
-                else { alert("WRONG PASSWORD"); }
-            },
-
-            boot() {
-                document.getElementById('auth-overlay').style.display = "none";
-                document.getElementById('desktop').style.display = "block";
-                this.initEngine();
+                if(p === "honey" || p === "masononly69") {
+                    if(p === "masononly69") document.getElementById('owner-icon').classList.remove('hidden');
+                    document.getElementById('auth-overlay').style.display = "none";
+                    document.getElementById('desktop').style.display = "block";
+                    this.initEngine();
+                } else { alert("ACCESS DENIED"); }
             },
 
             toggle(m) {
@@ -143,30 +131,29 @@
                 this.orbs.push({
                     x: x || Math.random() * c.width,
                     y: y || Math.random() * c.height,
-                    r: this.baseRadius,
-                    vx: (Math.random() - 0.5) * 2,
-                    vy: (Math.random() - 0.5) * 2,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
                     hue: Math.random() * 360,
-                    driftX: (Math.random() - 0.5) * 0.1,
-                    driftY: (Math.random() - 0.5) * 0.1
+                    driftX: (Math.random() - 0.5) * 0.05,
+                    driftY: (Math.random() - 0.5) * 0.05
                 });
             },
 
-            chaosBurst() { for(let i=0; i<10; i++) this.addOrb(); },
-            mobilePulse(state) { this.isMouseDown = state; this.boundary = state ? 400 : 120; },
+            chaosBurst() { for(let i=0; i<12; i++) this.addOrb(); },
+            mobilePulse(s) { this.isMouseDown = s; this.boundary = s ? 350 : 130; },
 
             spawn(type) {
                 const id = 'w-' + Math.random().toString(36).substr(2, 5);
                 const win = document.createElement('div');
-                win.className = 'window'; win.id = id; win.style.width = "300px"; win.style.left = "35%"; win.style.top = "20%";
+                win.className = 'window'; win.id = id; win.style.width = "300px"; win.style.left = "40%"; win.style.top = "25%";
                 
                 let body = '';
                 if(type === 'settings') {
-                    body = `<div style="padding:15px;"><p style="font-size:12px;">Push Range</p><input type="range" min="50" max="400" value="${this.boundary}" oninput="Mansion.boundary=this.value" style="width:100%;"></div>`;
+                    body = `<div style="padding:20px;"><p style="font-size:11px;">Push Range</p><input type="range" min="50" max="400" value="${this.boundary}" oninput="Mansion.boundary=this.value" style="width:100%; margin-top:10px;"></div>`;
                 } else if(type === 'themes') {
                     body = `<div style="padding:15px;">${this.themes.map(t=>`<button class="option-btn" onclick="Mansion.setTheme('${t.n}')">${t.n}</button>`).join('')}</div>`;
                 } else if(type === 'games') {
-                    body = `<div style="padding:20px; text-align:center;"><button class="option-btn active" onclick="Mansion.play()">Play Gladihoppers</button></div>`;
+                    body = `<div style="padding:20px; text-align:center;"><button class="option-btn active" onclick="Mansion.play()">Gladihoppers</button></div>`;
                 }
 
                 win.innerHTML = `<div class="win-header" onmousedown="Mansion.drag(event, '${id}')"><span class="win-title">${type}</span><span class="win-close" onclick="this.parentElement.parentElement.remove()">×</span></div><div>${body}</div>`;
@@ -181,8 +168,8 @@
 
             play() {
                 const win = document.createElement('div');
-                win.className = 'window'; win.style.width="90%"; win.style.height="80%"; win.style.left="5%"; win.style.top="10%";
-                win.innerHTML = `<div class="win-header"><span>GAME PORTAL</span><span class="win-close" onclick="this.parentElement.parentElement.remove()">×</span></div><iframe src="https://xfrapo.github.io/projectroyal/projects/gladihoppers/index.html"></iframe>`;
+                win.className = 'window'; win.style.width="90%"; win.style.height="85%"; win.style.left="5%"; win.style.top="7%";
+                win.innerHTML = `<div class="win-header"><span>GAME</span><span class="win-close" onclick="this.parentElement.parentElement.remove()">×</span></div><iframe src="https://xfrapo.github.io/projectroyal/projects/gladihoppers/index.html"></iframe>`;
                 document.getElementById('win-layer').appendChild(win);
             },
 
@@ -198,74 +185,67 @@
             initEngine() {
                 const c = document.getElementById('bg-canvas');
                 const ctx = c.getContext('2d');
-                let pointer = { x: -1000, y: -1000 };
+                let ptr = { x: -1000, y: -1000 };
 
-                const updatePointer = (e) => {
-                    const cx = e.touches ? e.touches[0].clientX : e.clientX;
-                    const cy = e.touches ? e.touches[0].clientY : e.clientY;
-                    pointer.x = cx; pointer.y = cy;
-                };
-
-                window.addEventListener('mousemove', updatePointer);
-                window.addEventListener('touchstart', (e) => { this.isMouseDown = true; updatePointer(e); });
+                const upPtr = (e) => { ptr.x = e.touches ? e.touches[0].clientX : e.clientX; ptr.y = e.touches ? e.touches[0].clientY : e.clientY; };
+                window.addEventListener('mousemove', upPtr);
+                window.addEventListener('touchstart', (e) => { this.isMouseDown = true; upPtr(e); });
                 window.addEventListener('touchend', () => { this.isMouseDown = false; });
                 window.addEventListener('mousedown', (e) => { 
                     this.isMouseDown = true; 
-                    this.orbs = this.orbs.filter(o => Math.sqrt((o.x-e.clientX)**2 + (o.y-e.clientY)**2) > o.r);
+                    this.orbs = this.orbs.filter(o => Math.sqrt((o.x-e.clientX)**2 + (o.y-e.clientY)**2) > this.baseRadius);
                 });
                 window.addEventListener('mouseup', () => this.isMouseDown = false);
                 window.addEventListener('keydown', e => { if(e.key.toLowerCase() === 'h') this.chaosBurst(); });
 
-                const resize = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
-                window.onresize = resize; resize();
+                window.onresize = () => { c.width = window.innerWidth; c.height = window.innerHeight; };
+                window.onresize();
                 for(let i=0; i<35; i++) this.addOrb();
 
-                const draw = () => {
+                const loop = () => {
                     ctx.fillStyle = this.mods.trails ? "rgba(5,4,0,0.1)" : getComputedStyle(document.documentElement).getPropertyValue('--bg');
                     ctx.fillRect(0,0,c.width,c.height);
 
                     this.orbs.forEach((o, i) => {
-                        let dx = o.x - pointer.x, dy = o.y - pointer.y;
-                        let dist = Math.sqrt(dx*dx + dy*dy);
-                        
-                        if(dist < this.boundary) {
-                            let f = (this.boundary - dist) / this.boundary;
-                            let m = this.isMouseDown ? -15 : 8;
-                            o.vx += (dx/dist) * f * m; o.vy += (dy/dist) * f * m;
+                        let dx = o.x - ptr.x, dy = o.y - ptr.y;
+                        let d = Math.sqrt(dx*dx + dy*dy);
+                        if(d < this.boundary) {
+                            let f = (this.boundary - d) / this.boundary;
+                            let m = this.isMouseDown ? -10 : 5;
+                            o.vx += (dx/d) * f * m; o.vy += (dy/d) * f * m;
                         }
                         
                         if(this.mods.float) {
                             o.vx += o.driftX; o.vy += o.driftY;
-                            if(Math.random() < 0.01) { o.driftX = (Math.random()-0.5)*0.2; o.driftY = (Math.random()-0.5)*0.2; }
-                        }
-                        
-                        if(this.mods.magnet) {
-                            this.orbs.forEach((o2, j) => { if(i!==j){ let d2x=o2.x-o.x, d2y=o2.y-o.y; let d2=Math.sqrt(d2x*d2x+d2y*d2y); if(d2<110){o.vx+=d2x*0.003; o.vy+=d2y*0.003;}}});
+                            if(Math.random() < 0.01) { o.driftX = (Math.random()-0.5)*0.1; o.driftY = (Math.random()-0.5)*0.1; }
                         }
 
-                        let fric = this.mods.warp ? 1.02 : 0.97;
-                        o.vx *= fric; o.vy *= fric;
+                        if(this.mods.magnet) {
+                            this.orbs.forEach((o2, j) => { if(i!==j){ let d2x=o2.x-o.x, d2y=o2.y-o.y; let d2=Math.sqrt(d2x*d2x+d2y*d2y); if(d2<100){o.vx+=d2x*0.002; o.vy+=d2y*0.002;}}});
+                        }
+
+                        let friction = this.mods.warp ? 1.01 : 0.98;
+                        o.vx *= friction; o.vy *= friction;
                         o.x += o.vx; o.y += o.vy;
 
                         if(o.x < -50) o.x = c.width + 50; if(o.x > c.width+50) o.x = -50;
                         if(o.y < -50) o.y = c.height + 50; if(o.y > c.height+50) o.y = -50;
 
-                        if(this.mods.jitter) { o.x += (Math.random()-0.5)*10; o.y += (Math.random()-0.5)*10; }
+                        if(this.mods.jitter) { o.x += (Math.random()-0.5)*8; o.y += (Math.random()-0.5)*8; }
                         if(this.mods.rgb) { o.hue = (o.hue + 2) % 360; }
 
-                        let r = this.mods.pulse ? this.baseRadius + Math.sin(Date.now()/300)*15 : this.baseRadius;
-                        let g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
-                        let color = this.mods.rgb ? `hsla(${o.hue}, 80%, 65%, 0.4)` : getComputedStyle(document.documentElement).getPropertyValue('--glow');
+                        let r = this.mods.pulse ? this.baseRadius + Math.sin(Date.now()/350)*12 : this.baseRadius;
+                        let grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, r);
+                        let col = this.mods.rgb ? `hsla(${o.hue}, 80%, 65%, 0.4)` : getComputedStyle(document.documentElement).getPropertyValue('--glow');
+                        grad.addColorStop(0, this.mods.shadow ? "#000" : col);
+                        grad.addColorStop(1, "transparent");
                         
-                        g.addColorStop(0, this.mods.shadow ? "#000" : color);
-                        g.addColorStop(1, "transparent");
-                        
-                        ctx.fillStyle = g;
+                        ctx.fillStyle = grad;
                         ctx.beginPath(); ctx.arc(o.x, o.y, r, 0, Math.PI*2); ctx.fill();
                     });
-                    requestAnimationFrame(draw);
+                    requestAnimationFrame(loop);
                 };
-                draw();
+                loop();
             }
         };
     </script>
